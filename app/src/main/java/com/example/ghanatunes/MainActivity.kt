@@ -18,6 +18,14 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
+        changeToFirstActivityAfterDelay()
+    }
+
+    private fun changeToFirstActivityAfterDelay() {
+        val view = findViewById<ConstraintLayout>(R.id.myCoordinatorLayout)
+        val r: Runnable = Runnable {
+            Snackbar.make(view, "Printing  text after delay", Snackbar.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -35,5 +43,7 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+        val mHandler = Handler();
+        mHandler.postDelayed(r, 5000)
     }
 }

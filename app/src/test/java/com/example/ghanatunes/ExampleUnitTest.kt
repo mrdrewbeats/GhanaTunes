@@ -1,5 +1,6 @@
 package com.example.ghanatunes
 
+import com.ghanatunes.internals.RadioStation
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -10,8 +11,18 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+    lateinit var testRadio:RadioStation
+    @BeforeAll fun setup(){
+        testRadio = RadioStation("MyTestFm", "MyStreamLink")
+    }
+
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+    }
+
+    @Test
+    fun canCreateRadioStation(){
+
     }
 }

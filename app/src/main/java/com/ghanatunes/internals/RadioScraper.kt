@@ -26,19 +26,27 @@ class RadioScraper {
         if (childrenCount == 0)
             throw  IllegalAccessError("Could not find elements in $pageNumber")
 
-        var radistation : String
-
-        //ConstructRadioStations from website
-        radioItems.forEach{ n ->
-
-            var radioStatiourl  = n.attr("data-url")
-            var radioStationName = n.attr("title").substringAfter("Play ")
-            val currentRadio = RadioStation(radioStationName,radioStatiourl)
-            radioStations.add(currentRadio)
-        }
+        ConstructRadioObjectFromHTMLItems(radioItems)
 
         var size = radioStations.count()
         return radioItems
+    }
+
+    private fun ConstructRadioObjectFromHTMLItems(radioItems: Elements) {
+
+        radioItems.forEach { n ->
+            var radioStatiourl = n.attr("data-url")
+
+            //Strip play from div title
+            var radioStationName = n.attr("title").substringAfter("Play ")
+            val currentRadio = RadioStation(radioStationName, radioStatiourl)
+
+            // avoid add station if it exists
+            if (radioStations.contains(currentRadio))
+                return
+
+            radioStations.add(currentRadio)
+        }
     }
 
 

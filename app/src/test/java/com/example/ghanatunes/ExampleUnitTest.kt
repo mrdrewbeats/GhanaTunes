@@ -1,5 +1,6 @@
 package com.example.ghanatunes
 
+import com.ghanatunes.internals.RadioScraper
 import com.ghanatunes.internals.RadioStation
 import org.junit.Test
 
@@ -12,8 +13,11 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     lateinit var testRadio:RadioStation
-    @BeforeAll fun setup(){
-        testRadio = RadioStation("MyTestFm", "MyStreamLink")
+    lateinit var radioscraper: RadioScraper
+
+    internal fun setup(){
+        //Initialize class members
+
     }
 
     @Test
@@ -21,8 +25,5 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 
-    @Test
-    fun canCreateRadioStation(){
 
-    }
 }

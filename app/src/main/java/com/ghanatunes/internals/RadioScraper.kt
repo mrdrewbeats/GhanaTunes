@@ -1,45 +1,52 @@
 package com.ghanatunes.internals
+import android.os.AsyncTask
+import android.os.Handler
+import android.os.NetworkOnMainThreadException
 import android.util.Log
 import org.jsoup.*
 import org.jsoup.select.Elements
 
-class RadioScraper {
+class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, String>() {
     val radioSource:StringBuilder = StringBuilder("https://streema.com/radios/country/Ghana")
-    lateinit var radioStations:MutableList<RadioStation>
+    var radioStations:MutableList<RadioStation>
+    lateinit var onRadiosLoadedInterface: StationLoaded
 
     init {
         radioStations = mutableListOf<RadioStation>()
+        onRadiosLoadedInterface = stationLoaded
     }
 
-    fun goToPage(pageNumber: Int = 0): StringBuilder{
-        return radioSource.append("?page=$pageNumber")
+    fun goToPage(pageNumber: Int = 0): String{
+        return "${radioSource.toString()}?page=$pageNumber"
     }
 
-    open fun getRadiosFromPage(pageNumber: Int = 1): Any
+    protected fun getRadiosFromPage(pageNumber: Int = 1): Unit
     {
-        var pageURL = goToPage(pageNumber)
-        var doc = Jsoup.connect(pageURL.toString()).get()
-        var itemsList:Elements = doc.getElementsByClass("items-list")
-        var radioItems = itemsList.get(0).getElementsByAttributeStarting("data-role")
+        try {
+            val pageURL = goToPage(pageNumber)
+            val doc = Jsoup.connect(pageURL).get()
+            val itemsList:Elements = doc.getElementsByClass("items-list")
+            val radioItems = itemsList[0].getElementsByAttributeStarting("data-role")
 
-        var childrenCount = itemsList.get(0).childrenSize()
-        if (childrenCount == 0)
-            throw  IllegalAccessError("Could not find elements in $pageNumber")
+            val childrenCount = itemsList[0].childrenSize()
+            if (childrenCount == 0)
+                throw  IllegalAccessError("Could not find elements in $pageNumber")
 
-        ConstructRadioObjectFromHTMLItems(radioItems)
+            ConstructRadioObjectFromHTMLItems(radioItems)
 
-        var size = radioStations.count()
-        return radioItems
+        }catch (e:Exception){
+            Log.d("RadioScraper", "Could not parse Radio stations")
+        }
     }
 
     private fun ConstructRadioObjectFromHTMLItems(radioItems: Elements) {
 
         radioItems.forEach { n ->
-            var radioStatiourl = n.attr("data-url")
+            var radioStationurl = n.attr("data-url")
 
             //Strip play from div title
             var radioStationName = n.attr("title").substringAfter("Play ")
-            val currentRadio = RadioStation(radioStationName, radioStatiourl)
+            val currentRadio = RadioStation(radioStationName, radioStationurl)
 
             // avoid add station if it exists
             if (radioStations.contains(currentRadio))
@@ -47,6 +54,20 @@ class RadioScraper {
 
             radioStations.add(currentRadio)
         }
+    }
+
+    override fun doInBackground(vararg params: Void?): String {
+        for (i in 1..10){
+            getRadiosFromPage(i)
+        }
+        Log.d("RadioScraper", "Loading Radios")
+        return ""
+    }
+
+    override fun onPostExecute(result: String?) {
+        super.onPostExecute(result)
+        Log.d("RadioScraper", "Finished Loading Radios")
+        this.onRadiosLoadedInterface.setRadiosAfterLoadingSuccessful(this.radioStations)
     }
 
 

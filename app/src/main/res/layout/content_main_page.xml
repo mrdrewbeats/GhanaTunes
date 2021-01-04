@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/TestPlay"
-    android:background="#222123"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#4527A0"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <Button
@@ -14,6 +14,6 @@
         android:layout_height="wrap_content"
         android:text="Play stop"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="128dp"
-        tools:layout_editor_absoluteY="147dp" />
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="418dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,7 @@ class MainContentPage : AppCompatActivity(), View.OnClickListener, StationLoaded
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_content_page)
+        setContentView(R.layout.media_control_page)
 
         val r = RadioScraper(this)
         r.execute()

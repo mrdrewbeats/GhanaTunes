@@ -4,23 +4,19 @@ import junit.framework.TestCase
 import org.junit.Assert
 import org.junit.Test
 
-class RadioScraperTest : TestCase() {
+class RadioScraperTest : TestCase(), StationLoaded {
 
     lateinit var testRadio:RadioStation
     lateinit var radioScraper: RadioScraper
+    var dummyRadios = mutableListOf<RadioStation>().apply {
+        add(RadioStation("Test Radio 1","stream link 1"))
+        add(RadioStation("Test radio 2","Stream 2"))
+    }
 
     public override fun setUp() {
         super.setUp()
         testRadio = RadioStation("MyTestFm", "MyStreamLink")
-        radioScraper = RadioScraper()
-    }
-
-    fun testGetRadioSource() {}
-
-    @Test
-    fun testGoToPage() {
-        var itemslist = radioScraper.getRadiosFromPage()
-        Assert.assertNotNull(itemslist)
+        radioScraper = RadioScraper(this)
     }
 
     @Test
@@ -30,9 +26,8 @@ class RadioScraperTest : TestCase() {
         Assert.assertTrue(newPageURl.contains("page=3"))
     }
 
-    @Test
-    fun radioIsGeneratedFromWebsite()
-    {
-        var radiosOfPage1 = radioScraper.getRadiosFromPage(1)
+    override fun setRadiosAfterLoadingSuccessful(stationsList: MutableList<RadioStation>) {
+        this.dummyRadios = stationsList
     }
+
 }

@@ -1,20 +1,13 @@
 package com.ghanatunes.internals
 import android.os.AsyncTask
-import android.os.Handler
-import android.os.NetworkOnMainThreadException
 import android.util.Log
 import org.jsoup.*
 import org.jsoup.select.Elements
 
-class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, String>() {
-    val radioSource:StringBuilder = StringBuilder("https://streema.com/radios/country/Ghana")
-    var radioStations:MutableList<RadioStation>
-    lateinit var onRadiosLoadedInterface: StationLoaded
-
-    init {
-        radioStations = mutableListOf<RadioStation>()
-        onRadiosLoadedInterface = stationLoaded
-    }
+open class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, String>() {
+    private val radioSource:StringBuilder = StringBuilder("https://streema.com/radios/country/Ghana")
+    private var radioStations:MutableList<RadioStation> = mutableListOf<RadioStation>()
+    private var onRadiosLoadedInterface: StationLoaded = stationLoaded
 
     fun goToPage(pageNumber: Int = 0): String{
         return "${radioSource.toString()}?page=$pageNumber"
@@ -32,26 +25,21 @@ class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, String>(
             if (childrenCount == 0)
                 throw  IllegalAccessError("Could not find elements in $pageNumber")
 
-            ConstructRadioObjectFromHTMLItems(radioItems)
+            constructRadioObjectFromHTMLItems(radioItems)
 
         }catch (e:Exception){
             Log.d("RadioScraper", "Could not parse Radio stations")
         }
     }
 
-    private fun ConstructRadioObjectFromHTMLItems(radioItems: Elements) {
+    protected fun constructRadioObjectFromHTMLItems(radioItems: Elements) {
 
         radioItems.forEach { n ->
-            var radioStationurl = n.attr("data-url")
+            val radioStationurl = "https://streema.com/${n.attr("data-url")}"
 
             //Strip play from div title
-            var radioStationName = n.attr("title").substringAfter("Play ")
+            val radioStationName = n.attr("title").substringAfter("Play ")
             val currentRadio = RadioStation(radioStationName, radioStationurl)
-
-            // avoid add station if it exists
-            if (radioStations.contains(currentRadio))
-                return
-
             radioStations.add(currentRadio)
         }
     }
@@ -66,8 +54,11 @@ class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, String>(
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-        Log.d("RadioScraper", "Finished Loading Radios")
+
         this.onRadiosLoadedInterface.setRadiosAfterLoadingSuccessful(this.radioStations)
+
+        this.radioStations.forEach{n -> Log.d("RadioScraper", "Radio name${n.name} => radio url ${n.streamUrlLink}")}
+
     }
 
 

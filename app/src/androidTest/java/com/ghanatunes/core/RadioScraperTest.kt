@@ -1,4 +1,4 @@
-package com.ghanatunes.internals
+package com.ghanatunes.core
 
 import junit.framework.TestCase
 import org.junit.Assert
@@ -26,7 +26,7 @@ class RadioScraperTest : TestCase(), StationLoaded {
         Assert.assertTrue(newPageURl.contains("page=3"))
     }
 
-    override fun setRadiosAfterLoadingSuccessful(stationsList: MutableList<RadioStation>) {
+    override fun notifyRadioStationLoaded(stationsList: MutableList<RadioStation>) {
         this.dummyRadios = stationsList
     }
 

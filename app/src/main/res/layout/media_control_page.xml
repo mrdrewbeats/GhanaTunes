@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/colorAccent"
-
+    android:id="@+id/media_control_page_root"
     android:layout_height="match_parent"
     tools:context=".MainContentPage"
 >
@@ -17,15 +17,17 @@
         app:layout_anchorGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.962" />
+        app:layout_constraintVertical_bias="0.973" />
 
     <TextView
         android:id="@+id/radio_name"
         android:layout_width="170dp"
         android:layout_height="39dp"
         android:text="Radio Name"
+        android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/include"
@@ -35,8 +37,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.07" />
 
-
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="252dp"
         android:layout_height="193dp"
         android:layout_margin="0dp"
@@ -57,9 +59,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/radio_name"
             app:layout_constraintVertical_bias="0.52"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            tools:srcCompat="@drawable/ic_baseline_favorite_border_24" />
 
     </androidx.cardview.widget.CardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

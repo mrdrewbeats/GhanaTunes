@@ -1,16 +1,16 @@
-package com.ghanatunes.internals
+package com.ghanatunes.core
 import android.os.AsyncTask
 import android.util.Log
 import org.jsoup.*
 import org.jsoup.select.Elements
 
-open class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, String>() {
+internal class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, String>() {
     private val radioSource:StringBuilder = StringBuilder("https://streema.com/radios/country/Ghana")
     private var radioStations:MutableList<RadioStation> = mutableListOf<RadioStation>()
     private var onRadiosLoadedInterface: StationLoaded = stationLoaded
 
     fun goToPage(pageNumber: Int = 0): String{
-        return "${radioSource.toString()}?page=$pageNumber"
+        return "$radioSource?page=$pageNumber"
     }
 
     protected fun getRadiosFromPage(pageNumber: Int = 1): Unit
@@ -32,14 +32,27 @@ open class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, Str
         }
     }
 
+    protected fun getImageLinkForRadio(radioStationLink: String): String
+    {
+        try {
+            val radiopage = Jsoup.connect(radioStationLink.replace("https","http")).get()
+            val imageDiv = radiopage.getElementsByClass("song-image")
+        }
+        catch (e:Exception){
+            Log.d("RadioScraper","Could not get radio information for $radioStationLink")
+        }
+        return ""
+
+    }
+
     protected fun constructRadioObjectFromHTMLItems(radioItems: Elements) {
 
         radioItems.forEach { n ->
             val radioStationurl = "https://streema.com/${n.attr("data-url")}"
-
+            val radioStationImage = getImageLinkForRadio(radioStationurl)
             //Strip play from div title
             val radioStationName = n.attr("title").substringAfter("Play ")
-            val currentRadio = RadioStation(radioStationName, radioStationurl)
+            val currentRadio = RadioStation(radioStationName, radioStationurl,radioStationImage)
             radioStations.add(currentRadio)
         }
     }
@@ -48,6 +61,7 @@ open class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, Str
         for (i in 1..10){
             getRadiosFromPage(i)
         }
+
         Log.d("RadioScraper", "Loading Radios")
         return ""
     }
@@ -55,10 +69,8 @@ open class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void, Str
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
 
-        this.onRadiosLoadedInterface.setRadiosAfterLoadingSuccessful(this.radioStations)
-
+        this.onRadiosLoadedInterface.notifyRadioStationLoaded(this.radioStations)
         this.radioStations.forEach{n -> Log.d("RadioScraper", "Radio name${n.name} => radio url ${n.streamUrlLink}")}
-
     }
 
 

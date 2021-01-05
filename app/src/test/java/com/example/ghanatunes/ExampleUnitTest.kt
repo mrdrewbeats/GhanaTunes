@@ -1,7 +1,7 @@
 package com.example.ghanatunes
 
-import com.ghanatunes.internals.RadioScraper
-import com.ghanatunes.internals.RadioStation
+import com.ghanatunes.core.RadioScraper
+import com.ghanatunes.core.RadioStation
 import org.junit.Test
 
 import org.junit.Assert.*

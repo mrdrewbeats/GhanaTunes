@@ -34,15 +34,20 @@ internal class RadioScraper(stationLoaded: StationLoaded): AsyncTask<Void, Void,
 
     protected fun getImageLinkForRadio(radioStationLink: String): String
     {
+        lateinit var imageTag:String
         try {
-            val radiopage = Jsoup.connect(radioStationLink.replace("https","http")).get()
-            val imageDiv = radiopage.getElementsByClass("song-image")
+            val radiopage = Jsoup.connect(radioStationLink).get()
+            val radioLinkTag = radiopage.getElementsByClass("song-image").get(0).childNodes()
+            imageTag = radioLinkTag.get(1).childNode(1).attr("src")
+
+            if (imageTag == null){
+                Log.d("RadioScraper", "Could not get image")
+            }
         }
         catch (e:Exception){
             Log.d("RadioScraper","Could not get radio information for $radioStationLink")
         }
-        return ""
-
+        return imageTag
     }
 
     protected fun constructRadioObjectFromHTMLItems(radioItems: Elements) {

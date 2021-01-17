@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/colorAccent"
+    android:background="#26242B"
     android:id="@+id/media_control_page_root"
     android:layout_height="match_parent"
     tools:context=".MainContentPage"
@@ -24,18 +24,17 @@
 
     <TextView
         android:id="@+id/radio_name"
-        android:layout_width="170dp"
-        android:layout_height="39dp"
+        android:layout_width="121dp"
+        android:layout_height="69dp"
         android:text="Radio Name"
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
+        app:layout_constraintVertical_bias="0.078" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -50,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/radio_name">
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/radio_image"
             android:layout_width="254dp"
             android:layout_height="175dp"
             app:layout_constraintBottom_toTopOf="@+id/include"

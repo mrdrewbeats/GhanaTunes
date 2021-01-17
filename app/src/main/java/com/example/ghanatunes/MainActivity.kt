@@ -3,12 +3,14 @@ package com.example.ghanatunes
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
 import com.ghanatunes.core.RadioScraper
 import com.ghanatunes.core.RadioStation
 import com.ghanatunes.core.StationLoaded
@@ -17,15 +19,15 @@ import com.ghanatunes.core.StationLoaded
 class MainActivity : AppCompatActivity(), StationLoaded {
 
     lateinit var loadedRadios:MutableList<RadioStation>
-    internal lateinit var radioScraper: RadioScraper
+    private lateinit var radioScraper: RadioScraper
     lateinit var mainActivityCoordinatorLayout: ConstraintLayout
     lateinit var playStop: ImageView
     lateinit var previousButton: ImageView
     lateinit var nextButton: ImageView
     lateinit var radioName: TextView
+    lateinit var radioImage: ImageView
 
     var radioStationNumber:Int = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,12 +35,10 @@ class MainActivity : AppCompatActivity(), StationLoaded {
 
         initializeUIControls()
 
+        loadedRadios = mutableListOf<RadioStation>()
         mainActivityCoordinatorLayout = findViewById<ConstraintLayout>(R.id.media_control_page_root)
         radioScraper = RadioScraper(this)
         radioScraper.execute()
-
-        //hideSystemUserInterface()
-        //changeActivityAfterDelay()
     }
 
     private fun initializeUIControls() {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), StationLoaded {
         nextButton = findViewById(R.id.next_button)
         previousButton = findViewById(R.id.previous_button)
         playStop = findViewById(R.id.play_stop_button)
-
+        radioImage = findViewById(R.id.radio_image)
 
         nextButton.setOnClickListener(View.OnClickListener {
             goToNextPage()
@@ -58,19 +58,20 @@ class MainActivity : AppCompatActivity(), StationLoaded {
     }
 
     private fun goToNextPage(){
-        ++radioStationNumber
 
         if(radioStationNumber == loadedRadios.size){
             radioStationNumber = 0
         }
 
-        displayRadioStation(this.loadedRadios.get(radioStationNumber))
+        if (radioStationNumber < loadedRadios.size-1){
+            ++radioStationNumber
+            displayRadioStation(this.loadedRadios[radioStationNumber])
+        }
     }
 
     private fun goToPreviousPage(){
 
-
-        if(radioStationNumber == 0){
+        if(radioStationNumber <= 0){
             radioStationNumber = loadedRadios.size -1
         }
 
@@ -102,11 +103,13 @@ class MainActivity : AppCompatActivity(), StationLoaded {
         this.loadedRadios = stationsList
         Snackbar.make(mainActivityCoordinatorLayout,"Finished loading radios",Snackbar.LENGTH_LONG).show()
 
-        displayRadioStation(stationsList.get(radioStationNumber))
+        displayRadioStation(stationsList[radioStationNumber])
     }
 
     private fun displayRadioStation(currentRadioStation: RadioStation) {
         radioName.text = currentRadioStation.name
+        Glide.with(this)
+            .load(currentRadioStation.imageLink)
+            .into(radioImage)
     }
-
 }

@@ -8,7 +8,7 @@
     app:behavior_hideable="false"
     app:behavior_peekHeight="550dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    android:background="@color/design_default_color_primary">
+    android:background="@android:color/background_dark">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

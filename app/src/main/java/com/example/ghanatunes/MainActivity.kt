@@ -33,12 +33,12 @@ class MainActivity : AppCompatActivity(), StationLoaded {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.media_control_page)
 
-        initializeUIControls()
+        //initializeUIControls()
 
-        loadedRadios = mutableListOf<RadioStation>()
-        mainActivityCoordinatorLayout = findViewById<ConstraintLayout>(R.id.media_control_page_root)
-        radioScraper = RadioScraper(this)
-        radioScraper.execute()
+        //loadedRadios = mutableListOf<RadioStation>()
+        //mainActivityCoordinatorLayout = findViewById<ConstraintLayout>(R.id.media_control_page_root)
+        //radioScraper = RadioScraper(this)
+        //radioScraper.execute()
     }
 
     private fun initializeUIControls() {

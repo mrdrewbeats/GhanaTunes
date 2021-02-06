@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"/>
 
-    <include layout="@layout/splash_layout" />
+    <include
+        layout="@layout/splash_layout"
+        android:rotationX="-207" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

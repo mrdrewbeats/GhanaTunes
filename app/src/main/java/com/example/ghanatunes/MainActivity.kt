@@ -6,6 +6,7 @@ import android.os.Handler
 import android.text.Html
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.ghanatunes.core.RadioScraper
 import com.ghanatunes.core.RadioStation
 import com.ghanatunes.core.StationLoaded
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 
 class MainActivity : AppCompatActivity(), StationLoaded {
@@ -26,12 +28,18 @@ class MainActivity : AppCompatActivity(), StationLoaded {
     lateinit var nextButton: ImageView
     lateinit var radioName: TextView
     lateinit var radioImage: ImageView
+    lateinit var  linearLayout_bottomSheet: LinearLayout
+    lateinit var bottomSheetViewBehavior: BottomSheetBehavior<LinearLayout>
+
+
 
     var radioStationNumber:Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.media_control_page)
+
+        initializeBottomSheet()
 
         //initializeUIControls()
 
@@ -41,7 +49,16 @@ class MainActivity : AppCompatActivity(), StationLoaded {
         //radioScraper.execute()
     }
 
+    private fun initializeBottomSheet(){
+        linearLayout_bottomSheet = findViewById(R.id.bottomSheet_LinearLayout)
+        var mediaBottomSheet = SecondFragment()
+        mediaBottomSheet.show(supportFragmentManager, SecondFragment.TAG)
+        bottomSheetViewBehavior = BottomSheetBehavior.from(linearLayout_bottomSheet)
+       }
+
     private fun initializeUIControls() {
+
+
         radioName = findViewById(R.id.radio_name)
         nextButton = findViewById(R.id.next_button)
         previousButton = findViewById(R.id.previous_button)

@@ -11,11 +11,17 @@ import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.bumptech.glide.Glide
+import com.example.ghanatunes.databinding.MediaControlPageBinding
+import com.example.ghanatunes.databinding.MediaPlayerBottomSheetBinding
 import com.ghanatunes.core.RadioScraper
 import com.ghanatunes.core.RadioStation
 import com.ghanatunes.core.StationLoaded
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.media_control_page.view.*
+import kotlinx.android.synthetic.main.media_player_bottom_sheet.view.*
 
 
 class MainActivity : AppCompatActivity(), StationLoaded {
@@ -29,49 +35,28 @@ class MainActivity : AppCompatActivity(), StationLoaded {
     lateinit var radioName: TextView
     lateinit var radioImage: ImageView
     lateinit var  linearLayout_bottomSheet: LinearLayout
-    lateinit var bottomSheetViewBehavior: BottomSheetBehavior<LinearLayout>
-
-
-
+    var bottomSheetViewBehavior: BottomSheetBehavior<View>? = null
     var radioStationNumber:Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.media_control_page)
+        val binding = MediaControlPageBinding.inflate(layoutInflater)
+        //bottomSheetViewBehavior =BottomSheetBehavior.from(binding.mediaControlPageRoot.include.bottomSheet_linear_layout)
+        initializeUIControls(binding)
 
-        initializeBottomSheet()
-
-        //initializeUIControls()
-
-        //loadedRadios = mutableListOf<RadioStation>()
-        //mainActivityCoordinatorLayout = findViewById<ConstraintLayout>(R.id.media_control_page_root)
-        //radioScraper = RadioScraper(this)
-        //radioScraper.execute()
     }
 
-    private fun initializeBottomSheet(){
-        linearLayout_bottomSheet = findViewById(R.id.bottomSheet_LinearLayout)
-        var mediaBottomSheet = SecondFragment()
-        mediaBottomSheet.show(supportFragmentManager, SecondFragment.TAG)
-        bottomSheetViewBehavior = BottomSheetBehavior.from(linearLayout_bottomSheet)
-       }
+    private fun initializeUIControls(mediaControlPageBinding: MediaControlPageBinding) {
 
-    private fun initializeUIControls() {
-
-
-        radioName = findViewById(R.id.radio_name)
-        nextButton = findViewById(R.id.next_button)
-        previousButton = findViewById(R.id.previous_button)
-        playStop = findViewById(R.id.play_stop_button)
-        radioImage = findViewById(R.id.radio_image)
-
-        nextButton.setOnClickListener(View.OnClickListener {
-            goToNextPage()
-        })
-
-        previousButton.setOnClickListener {
-            goToPreviousPage()
+        val bottomSheetBindings = MediaPlayerBottomSheetBinding.inflate(layoutInflater)
+        val bottomRadioName = bottomSheetBindings.bottomSheetLinearLayout.bottom_radio_name
+        //val bottomSheetBehavior = BottomSheetBehavior.from(mediaControlPageBinding.mediaControlPageRoot.include.media_control_page_root)
+        bottomRadioName.setOnClickListener {
+            //bottomSheetBehavior.setPeekHeight(200)
         }
+
+
     }
 
     private fun goToNextPage(){

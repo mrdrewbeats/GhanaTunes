@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.Html
+import android.util.Log
+import android.util.Log.d
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -22,6 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.media_control_page.view.*
 import kotlinx.android.synthetic.main.media_player_bottom_sheet.view.*
+import kotlinx.coroutines.flow.callbackFlow
 
 
 class MainActivity : AppCompatActivity(), StationLoaded {
@@ -48,19 +51,13 @@ class MainActivity : AppCompatActivity(), StationLoaded {
     }
 
     private fun initializeUIControls(mediaControlPageBinding: MediaControlPageBinding) {
-
         val bottomSheetBindings = MediaPlayerBottomSheetBinding.inflate(layoutInflater)
-        val bottomRadioName = bottomSheetBindings.bottomSheetLinearLayout.bottom_radio_name
-        //val bottomSheetBehavior = BottomSheetBehavior.from(mediaControlPageBinding.mediaControlPageRoot.include.media_control_page_root)
-        bottomRadioName.setOnClickListener {
-            //bottomSheetBehavior.setPeekHeight(200)
-        }
-
-
+        val bottomRadioName = mediaControlPageBinding.radioName
+        val bottomSheetBehavior = BottomSheetBehavior.from(mediaControlPageBinding.testingLayout.include)
+        bottomSheetBehavior.setPeekHeight(1000,true)
     }
 
     private fun goToNextPage(){
-
         if(radioStationNumber == loadedRadios.size){
             radioStationNumber = 0
         }

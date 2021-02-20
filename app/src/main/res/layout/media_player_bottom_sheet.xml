@@ -2,32 +2,16 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="70dp"
     android:id="@+id/bottomSheet_linear_layout"
-    app:behavior_hideable="true"
-    app:behavior_peekHeight="200dp"
     android:background="@color/cardview_dark_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/testConstraintLayouut"
         android:layout_width="match_parent"
-        android:layout_height="77dp">
-
-        <TextView
-            android:id="@+id/bottom_radio_name"
-            android:layout_width="127dp"
-            android:layout_height="24dp"
-            android:fontFamily="@font/quicksand_bold"
-            android:text="Adom FM"
-            android:textAlignment="center"
-            android:textColor="@color/cardview_light_background"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.301" />
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageView3"
@@ -36,10 +20,10 @@
             android:layout_marginStart="236dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.703"
+            app:layout_constraintHorizontal_bias="0.384"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.357"
+            app:layout_constraintVertical_bias="0.514"
             app:srcCompat="@drawable/ic_baseline_skip_next_24" />
 
         <ImageView
@@ -50,23 +34,40 @@
             android:rotation="180"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.006"
+            app:layout_constraintHorizontal_bias="0.01"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.357"
+            app:layout_constraintVertical_bias="0.457"
             app:srcCompat="@drawable/ic_baseline_skip_next_24" />
 
         <ImageView
             android:id="@+id/imageView2"
+            android:contentDescription="next image"
             android:layout_width="35dp"
             android:layout_height="35dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.018"
+            app:layout_constraintHorizontal_bias="0.044"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.357"
+            app:layout_constraintVertical_bias="0.457"
             app:srcCompat="@drawable/ic_baseline_play_circle_outline_24" />
+
+        <TextView
+            android:id="@+id/bottom_radio_name"
+            android:layout_width="205dp"
+            android:layout_height="47dp"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="Adom FM"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView3"
+            app:layout_constraintHorizontal_bias="0.408"
+            app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

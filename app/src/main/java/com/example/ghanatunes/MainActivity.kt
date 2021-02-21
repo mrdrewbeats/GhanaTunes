@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.graphics.translationMatrix
 import com.bumptech.glide.Glide
 import com.example.ghanatunes.databinding.MediaControlPageBinding
 import com.example.ghanatunes.databinding.MediaPlayerBottomSheetBinding
@@ -21,10 +22,12 @@ import com.ghanatunes.core.RadioScraper
 import com.ghanatunes.core.RadioStation
 import com.ghanatunes.core.StationLoaded
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.media_control_page.view.*
 import kotlinx.android.synthetic.main.media_player_bottom_sheet.view.*
 import kotlinx.coroutines.flow.callbackFlow
+import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity(), StationLoaded {
@@ -35,7 +38,7 @@ class MainActivity : AppCompatActivity(), StationLoaded {
     lateinit var playStop: ImageView
     lateinit var previousButton: ImageView
     lateinit var nextButton: ImageView
-    lateinit var radioName: TextView
+    lateinit var buttomSheetRadioName: TextView
     lateinit var radioImage: ImageView
     lateinit var  linearLayout_bottomSheet: LinearLayout
     var bottomSheetViewBehavior: BottomSheetBehavior<View>? = null
@@ -43,18 +46,61 @@ class MainActivity : AppCompatActivity(), StationLoaded {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.media_control_page)
         val binding = MediaControlPageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         //bottomSheetViewBehavior =BottomSheetBehavior.from(binding.mediaControlPageRoot.include.bottomSheet_linear_layout)
         initializeUIControls(binding)
 
     }
 
     private fun initializeUIControls(mediaControlPageBinding: MediaControlPageBinding) {
-        val bottomSheetBindings = MediaPlayerBottomSheetBinding.inflate(layoutInflater)
-        val bottomRadioName = mediaControlPageBinding.radioName
+        //bottomRadioName.text = "Hello world"
         val bottomSheetBehavior = BottomSheetBehavior.from(mediaControlPageBinding.testingLayout.include)
-        bottomSheetBehavior.setPeekHeight(1000,true)
+        bottomSheetBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback(){
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when(newState){
+                   BottomSheetBehavior.STATE_EXPANDED ->{
+                       d("BottomSheet","Do Something here")
+                       //make collapsed lineaer layout disappear
+                       var collapsedMediaControls = mediaControlPageBinding.include.bottomSheetLinearLayout.collapsedMediaControls
+
+                       collapsedMediaControls.visibility = View.GONE
+                    }
+
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        var collapsedMediaControls = mediaControlPageBinding.include.bottomSheetLinearLayout.collapsedMediaControls
+                        collapsedMediaControls.visibility = View.VISIBLE
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        d("BottomSheet","STATE_DRAGGING")
+                    }
+                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                        d("BottomSheet","STATE_HALF_EXPANDED")
+                    }
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        d("BottomSheet","STATE_HIDDEN")
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                        d("BottomSheet","STATE_SETTLING")
+                    }
+                }
+
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+        })
+//        bottomSheetBehavior.setPeekHeight(true)
+        //buttomSheetRadioName = mediaControlPageBinding.include.bottomSheetLinearLayout.bottom_radio_name
+//        buttomSheetRadioName.setOnClickListener{
+//            bottomSheetBehavior.apply {
+//                isHideable = true
+//                peekHeight = 500
+//                setState(BottomSheetBehavior.STATE_HALF_EXPANDED)
+//            }
+//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+//        }
+
     }
 
     private fun goToNextPage(){
@@ -106,7 +152,7 @@ class MainActivity : AppCompatActivity(), StationLoaded {
     }
 
     private fun displayRadioStation(currentRadioStation: RadioStation) {
-        radioName.text = currentRadioStation.name
+        //radioName.text = currentRadioStation.name
         Glide.with(this)
             .load(currentRadioStation.imageLink)
             .into(radioImage)

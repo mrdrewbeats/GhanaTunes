@@ -1,0 +1,5 @@
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="true">
+    <item android:drawable="@drawable/ic_baseline_play_circle_outline_24" android:duration="1500" />
+    <item android:drawable="@drawable/ic_baseline_stop_circle_24" android:duration="1500" />
+</animation-list>

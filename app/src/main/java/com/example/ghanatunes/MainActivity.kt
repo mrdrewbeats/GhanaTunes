@@ -1,9 +1,10 @@
 package com.example.ghanatunes
 
 import android.content.Intent
+import android.graphics.drawable.AnimatedVectorDrawable
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.text.Html
 import android.util.Log
 import android.util.Log.d
 import android.view.View
@@ -13,33 +14,29 @@ import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.graphics.translationMatrix
 import com.bumptech.glide.Glide
 import com.example.ghanatunes.databinding.MediaControlPageBinding
-import com.example.ghanatunes.databinding.MediaPlayerBottomSheetBinding
 import com.ghanatunes.core.RadioScraper
 import com.ghanatunes.core.RadioStation
 import com.ghanatunes.core.StationLoaded
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.media_control_page.view.*
 import kotlinx.android.synthetic.main.media_player_bottom_sheet.view.*
-import kotlinx.coroutines.flow.callbackFlow
-import org.w3c.dom.Text
 
 
-class MainActivity : AppCompatActivity(), StationLoaded {
+class MainActivity : AppCompatActivity(), StationLoaded, View.OnClickListener {
 
     lateinit var loadedRadios:MutableList<RadioStation>
     private lateinit var radioScraper: RadioScraper
     lateinit var mainActivityCoordinatorLayout: ConstraintLayout
-    lateinit var playStop: ImageView
+    lateinit var bottomPlayStop: ImageView
     lateinit var previousButton: ImageView
     lateinit var nextButton: ImageView
     lateinit var buttomSheetRadioName: TextView
     lateinit var radioImage: ImageView
+    lateinit var playStopAnimation: AnimationDrawable
+    var playing = true
     lateinit var  linearLayout_bottomSheet: LinearLayout
     var bottomSheetViewBehavior: BottomSheetBehavior<View>? = null
     var radioStationNumber:Int = 0
@@ -49,21 +46,35 @@ class MainActivity : AppCompatActivity(), StationLoaded {
         val binding = MediaControlPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //bottomSheetViewBehavior =BottomSheetBehavior.from(binding.mediaControlPageRoot.include.bottomSheet_linear_layout)
-        initializeUIControls(binding)
+        initializeBottomSheet(binding)
+        initilaizeUIcontrols(binding)
 
     }
 
-    private fun initializeUIControls(mediaControlPageBinding: MediaControlPageBinding) {
+    private fun initilaizeUIcontrols(mediaControlPageBinding: MediaControlPageBinding){
+        bottomPlayStop = mediaControlPageBinding.include.playButton.apply {
+            setBackgroundResource(R.drawable.play_to_stop_animation)
+            playStopAnimation = background as AnimationDrawable
+        }
+
+        bottomPlayStop.setOnClickListener(this)
+        previousButton = mediaControlPageBinding.include.previousButton
+        previousButton.setOnClickListener(this)
+        nextButton = mediaControlPageBinding.include.nextButton
+        nextButton.setOnClickListener(this)
+        buttomSheetRadioName = mediaControlPageBinding.include.bottomRadioName
+        buttomSheetRadioName.setOnClickListener(this)
+    }
+    private fun initializeBottomSheet(mediaControlPageBinding: MediaControlPageBinding) {
         //bottomRadioName.text = "Hello world"
         val bottomSheetBehavior = BottomSheetBehavior.from(mediaControlPageBinding.testingLayout.include)
-        bottomSheetBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback(){
+        bottomSheetBehavior.addBottomSheetCallback(object: BottomSheetCallback(){
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when(newState){
                    BottomSheetBehavior.STATE_EXPANDED ->{
-                       d("BottomSheet","Do Something here")
+                       d("MainActivity","Do Something here")
                        //make collapsed lineaer layout disappear
                        var collapsedMediaControls = mediaControlPageBinding.include.bottomSheetLinearLayout.collapsedMediaControls
-
                        collapsedMediaControls.visibility = View.GONE
                     }
 
@@ -72,16 +83,16 @@ class MainActivity : AppCompatActivity(), StationLoaded {
                         collapsedMediaControls.visibility = View.VISIBLE
                     }
                     BottomSheetBehavior.STATE_DRAGGING -> {
-                        d("BottomSheet","STATE_DRAGGING")
+                        d("MainActivity","STATE_DRAGGING")
                     }
                     BottomSheetBehavior.STATE_HALF_EXPANDED -> {
-                        d("BottomSheet","STATE_HALF_EXPANDED")
+                        d("MainActivity","STATE_HALF_EXPANDED")
                     }
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        d("BottomSheet","STATE_HIDDEN")
+                        d("MainActivity","STATE_HIDDEN")
                     }
                     BottomSheetBehavior.STATE_SETTLING -> {
-                        d("BottomSheet","STATE_SETTLING")
+                        d("MainActivity","STATE_SETTLING")
                     }
                 }
 
@@ -90,16 +101,7 @@ class MainActivity : AppCompatActivity(), StationLoaded {
 
             }
         })
-//        bottomSheetBehavior.setPeekHeight(true)
-        //buttomSheetRadioName = mediaControlPageBinding.include.bottomSheetLinearLayout.bottom_radio_name
-//        buttomSheetRadioName.setOnClickListener{
-//            bottomSheetBehavior.apply {
-//                isHideable = true
-//                peekHeight = 500
-//                setState(BottomSheetBehavior.STATE_HALF_EXPANDED)
-//            }
-//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-//        }
+
 
     }
 
@@ -156,5 +158,28 @@ class MainActivity : AppCompatActivity(), StationLoaded {
         Glide.with(this)
             .load(currentRadioStation.imageLink)
             .into(radioImage)
+    }
+
+    private fun switchPlayStopButtonImage(){
+        if(playing){
+            bottomPlayStop.setBackgroundResource(R.drawable.play_to_stop_animation)
+            playing = false
+            return
+        }
+        playing = true
+        bottomPlayStop.setBackgroundResource(R.drawable.stop_to_play_animation).apply {
+            playStopAnimation.start()
+        }
+    }
+
+    override fun onClick(v: View?) {
+        d("MainActivity","A view has been clicked")
+        when(v?.id){
+            bottomPlayStop.id ->{
+                playStopAnimation.start()
+                switchPlayStopButtonImage()
+                d("MainActivity","PlayStop")
+            }
+        }
     }
 }

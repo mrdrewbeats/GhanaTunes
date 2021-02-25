@@ -163,6 +163,7 @@ class MainActivity : AppCompatActivity(), StationLoaded, View.OnClickListener {
     private fun switchPlayStopButtonImage(){
         if(playing){
             bottomPlayStop.setBackgroundResource(R.drawable.play_to_stop_animation)
+            playStopAnimation.start()
             playing = false
             return
         }

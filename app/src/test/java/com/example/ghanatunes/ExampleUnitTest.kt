@@ -12,9 +12,6 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
-    lateinit var testRadio:RadioStation
-    lateinit var radioscraper: RadioScraper
-
     internal fun setup(){
         //Initialize class members
 
